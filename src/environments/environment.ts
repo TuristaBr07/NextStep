@@ -9,7 +9,7 @@
 export const environment = {
   production: false,
   // URL base do seu projeto Supabase. Exemplo: 'https://xyzcompany.supabase.co'
-  supabaseUrl: 'https://wsnrotqjekgelowseqet.supabase.co',
+  supabaseUrl: 'MUDAR PARA .ENV', // TESTE SOMENTE LOCAL
   // Chave anônima de acesso ao Supabase. Exemplo: 'public-anon-key'
-  supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzbnJvdHFqZWtnZWxvd3NlcWV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxNDQzOTIsImV4cCI6MjA3NzcyMDM5Mn0.6lFmXwZCHiruXkOpBEE24z6k5caxyNpbLMUWJWS1aXE'
+  supabaseAnonKey: 'MUDAR PARA .ENV' // TESTE SOMENTE LOCAL
 };
