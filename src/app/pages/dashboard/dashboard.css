@@ -1,0 +1,162 @@
+/*
+  Estilos específicos para o Dashboard. Aqui definimos estilos
+  para a modal de transação, botões menores e classes utilitárias
+  que não existem no CSS global. Estes estilos isolados garantem
+  que a aparência do componente fique consistente sem poluir
+  outras partes da aplicação.
+*/
+
+/* Modal backdrop que cobre toda a tela */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Contêiner da modal */
+.modal {
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: var(--shadow-md);
+}
+
+.modal h3 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Grupos de formulários */
+.form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* Ações na base da modal */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Botões de tamanho reduzido */
+.btn-sm {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: var(--color-primary-light);
+  color: var(--color-text);
+  transition: background-color 0.2s ease;
+}
+
+.btn-sm:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+/* Variante de botão de perigo para exclusão */
+.btn-danger {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #b2503a;
+}
+
+/* Utilitários de texto */
+.text-danger {
+  color: var(--color-danger);
+}
+
+.text-success {
+  color: var(--color-success);
+}
+
+/* Tamanho padrão do canvas do gráfico */
+canvas#lineChartCanvas {
+  width: 100%;
+  height: 300px;
+}
+
+/* Estilos para a barra de progresso do Limite MEI (RF005) */
+progress.mei-progress {
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border: none;
+  border-radius: 4px;
+  background: var(--color-border); /* Cor de fundo da barra vazia */
+  overflow: hidden;
+}
+
+/* Estilo para o preenchimento da barra de progresso (Webkit/Chrome/Safari) */
+progress.mei-progress::-webkit-progress-bar {
+  background: var(--color-border);
+}
+
+progress.mei-progress::-webkit-progress-value {
+  transition: width 0.5s ease;
+}
+
+/* Estilo para o preenchimento da barra de progresso (Firefox) */
+progress.mei-progress::-moz-progress-bar {
+  transition: width 0.5s ease;
+}
+
+/* Cores dinâmicas da barra de progresso */
+.progress-green::-webkit-progress-value {
+  background-color: var(--color-success);
+}
+.progress-green::-moz-progress-bar {
+  background-color: var(--color-success);
+}
+
+.progress-yellow::-webkit-progress-value {
+  background-color: var(--color-warning);
+}
+.progress-yellow::-moz-progress-bar {
+  background-color: var(--color-warning);
+}
+
+.progress-red::-webkit-progress-value {
+  background-color: var(--color-danger);
+}
+.progress-red::-moz-progress-bar {
+  background-color: var(--color-danger);
+}
+
+.charts {
+  max-width: 1800px; /* Define uma largura máxima. Ajuste este valor como preferir (ex: 700px) */
+  margin-left: 0;
+  margin-right: 0; 
+}

@@ -1,0 +1,91 @@
+<div class="dashboard-page">
+  <aside class="sidebar">
+    <a routerLink="/" class="logo">
+      <img src="assets/figma-assets/logo.webp" alt="logo" style="width:32px;height:32px;">
+      NextStep
+    </a>
+    <nav class="menu">
+      <a routerLink="/dashboard">Dashboard</a>
+      <a routerLink="/reports">Relatórios</a>
+      <a routerLink="/transactions">Transações</a>
+      <a routerLink="/settings" class="active">Configurações</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a routerLink="/">&larr; Voltar</a>
+      <a style="color: var(--color-danger); cursor: pointer;" (click)="fazerLogout()">&#x2716; Sair</a>
+    </div>
+  </aside>
+
+  <main class="dashboard-main">
+    <h1>Configurações</h1>
+    <p class="sub">Personalize categorias e seu perfil.</p>
+
+    <div class="settings-grid">
+
+      <div class="transactions-table">
+        <h3>Categorias</h3>
+        <form (ngSubmit)="saveCategory()" class="category-form">
+          <div class="form-group">
+            <label for="cat-name">Nome da categoria</label>
+            <input id="cat-name" type="text" [(ngModel)]="newCategory.name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="cat-type">Tipo</label>
+            <select id="cat-type" [(ngModel)]="newCategory.type" name="type" required>
+              <option value="Receita">Receita</option>
+              <option value="Despesa">Despesa</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="!newCategory.name">{{ editingCategory ? 'Atualizar' : 'Adicionar' }}</button>
+            <button type="button" class="btn btn-outline" *ngIf="editingCategory" (click)="resetCategoryForm()">Cancelar</button>
+          </div>
+        </form>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Tipo</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cat of categories$ | async">
+              <td>{{ cat.name }}</td>
+              <td>
+                <span class="tag" [ngClass]="{ 'income': cat.type === 'Receita', 'expense': cat.type === 'Despesa' }">
+                  {{ cat.type }}
+                </span>
+              </td>
+              <td>
+                <button class="btn btn-sm" (click)="editCategory(cat)">Editar</button>
+                <button class="btn btn-sm btn-danger" (click)="removeCategory(cat)">Excluir</button>
+              </td>
+            </tr>
+            <tr *ngIf="!(categories$ | async)?.length">
+              <td colspan="3" style="text-align: center; color: var(--color-text-light);">Nenhuma categoria cadastrada.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="transactions-table">
+        <h3>Perfil</h3>
+        <form (ngSubmit)="saveProfile()">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="prof-name">Nome completo</label>
+              <input id="prof-name" type="text" [(ngModel)]="profile.full_name" name="full_name">
+            </div>
+            <div class="form-group">
+              <label for="prof-company">Nome da empresa</label>
+              <input id="prof-company" type="text" [(ngModel)]="profile.company_name" name="company_name">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Salvar Perfil</button>
+        </form>
+      </div>
+
+    </div> </main>
+</div>

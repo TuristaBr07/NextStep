@@ -1,0 +1,32 @@
+<div class="auth-page">
+  <div class="auth-form">
+    <a routerLink="/login" class="back">&larr; Login</a>
+    <h2>CRIAR CONTA</h2>
+    <p class="sub">Já possui uma conta? <a routerLink="/login" style="color: var(--color-primary); text-decoration: underline;">Entrar</a></p>
+	    <form (ngSubmit)="fazerRegistro()">
+      <div class="form-group">
+        <span class="icon">&#128100;</span>
+        <input type="text" placeholder="Nome completo" [(ngModel)]="fullName" name="fullName" />
+      </div>
+      <div class="form-group">
+        <span class="icon">&#9993;</span>
+        <input type="email" placeholder="Seu e‑mail" required [(ngModel)]="email" name="email" />
+      </div>
+      <div class="form-group">
+        <span class="icon">&#128274;</span>
+        <input type="password" placeholder="Senha" required [(ngModel)]="password" name="password" />
+      </div>
+	      <div class="form-group">
+	        <span class="icon">&#128274;</span>
+	        <input type="password" placeholder="Confirmar senha" required [(ngModel)]="confirmPassword" name="confirmPassword" />
+	      </div>
+	      <button type="submit" class="btn btn-primary" style="width:100%;" [disabled]="isLoading">
+	        <span *ngIf="!isLoading">Cadastrar</span>
+	        <span *ngIf="isLoading">Carregando...</span>
+	      </button>
+	    </form>
+  </div>
+  <div class="auth-image">
+    <img src="assets/figma-assets/hero.webp" alt="Ilustração de cadastro" />
+  </div>
+</div>

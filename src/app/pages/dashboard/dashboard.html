@@ -1,0 +1,156 @@
+<div class="dashboard-page">
+    <aside class="sidebar">
+      <a routerLink="/" class="logo">
+        <img src="assets/figma-assets/logo.webp" alt="logo" style="width:32px;height:32px;">
+        NextStep
+      </a>
+      <nav class="menu">
+        <a routerLink="/dashboard" class="active">Dashboard</a>
+        <a routerLink="/reports">Relatórios</a>
+        <a routerLink="/transactions">Transações</a>
+        <a routerLink="/settings">Configurações</a>
+      </nav>
+      <div class="sidebar-footer">
+        <a routerLink="/">&larr; Voltar</a>
+        <a (click)="fazerLogout()" style="color: var(--color-danger); cursor: pointer;">&#x2716; Sair</a>
+      </div>
+    </aside>
+    <main class="dashboard-main">
+      <h1>Olá, {{ profileName || 'Empreendedor' }}! <span role="img" aria-label="saudação">👋</span></h1>
+      <p class="sub">Gerencie suas finanças com clareza e organize seu negócio</p>
+      <div style="margin: 1rem 0; text-align:right;">
+        <button class="btn btn-primary" (click)="openModal()">Nova Transação</button>
+      </div>
+      <div class="kpi-cards" *ngIf="!isLoading">
+        <div class="kpi-card balance">
+          <div class="icon">💼</div>
+          <div class="label">Saldo Atual</div>
+	          <div class="value">{{ balance | currency:'BRL':'symbol':'1.2-2' }}</div>
+          <small [ngClass]="{ 'text-danger': balance < 0, 'text-success': balance >= 0 }">
+            {{ balance >= 0 ? 'Situação positiva' : 'Situação negativa' }}
+          </small>
+        </div>
+        <div class="kpi-card income">
+          <div class="icon">📈</div>
+          <div class="label">Total de Receitas</div>
+          <div class="value">{{ totalIncome | currency:'BRL':'symbol':'1.2-2' }}</div>
+          <small style="color: var(--color-success);">{{ incomeCount }} transação(ões)</small>
+        </div>
+        <div class="kpi-card expense">
+          <div class="icon">📉</div>
+          <div class="label">Total de Despesas</div>
+          <div class="value">{{ totalExpense | currency:'BRL':'symbol':'1.2-2' }}</div>
+          <small style="color: var(--color-danger);">{{ expenseCount }} transação(ões)</small>
+        </div>
+      </div>
+      <div class="kpi-cards" style="margin-top:1rem;" *ngIf="!isLoading">
+        <div class="kpi-card" style="background:var(--color-surface); border:1px solid var(--color-border);">
+          <div class="label" style="font-weight:600;">Limite de Faturamento MEI</div>
+          <div class="value" style="font-size:1rem; margin-top:0.5rem;">
+            {{ totalIncome | currency:'BRL':'symbol':'1.2-2' }} de {{ MEI_LIMIT | currency:'BRL':'symbol':'1.2-2' }}
+          </div>
+          <progress class="mei-progress" [ngClass]="getMeiProgressClass()" [value]="meiLimitProgress" max="100"></progress>
+          <small style="margin-top: 0.5rem; display: block;">
+            Progresso: {{ meiLimitProgress | number:'1.0-2' }}%
+          </small>
+        </div>
+        <div class="kpi-card" style="background:var(--color-surface); border:1px solid var(--color-border);">
+          <div class="label" style="font-weight:600;">Alerta DAS</div>
+          <div style="display: flex; align-items: center; margin-top:0.5rem;">
+            <span style="font-size: 24px; color: var(--color-warning); margin-right: 10px;">&#9888;</span>
+            <p style="font-size:0.9rem; margin: 0;">Lembre-se de pagar seu DAS até o dia 20 de cada mês.</p>
+          </div>
+        </div>
+      </div>
+      <div class="charts" *ngIf="!isLoading">
+        <h3>Fluxo de Caixa</h3>
+        <canvas id="lineChartCanvas"></canvas>
+      </div>
+      <div class="transactions-table">
+        <h3 style="margin-bottom:1rem;">Transações</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Tipo</th>
+              <th>Categoria</th>
+              <th>Descrição</th>
+              <th>Valor</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let tx of transactions$ | async">
+              <td>{{ tx.date }}</td>
+              <td>
+                <span class="tag" [ngClass]="{ 'income': tx.type === 'Receita', 'expense': tx.type === 'Despesa' }">
+                  {{ tx.type }}
+                </span>
+              </td>
+              <td>{{ tx.category }}</td>
+              <td>{{ tx.description }}</td>
+              <td>{{ tx.amount | currency:'BRL':'symbol':'1.2-2' }}</td>
+              <td>
+                <button class="btn btn-sm" (click)="openModal(tx)">Editar</button>
+                <button class="btn btn-sm btn-danger" (click)="deleteTransaction(tx.id)">Excluir</button>
+              </td>
+            </tr>
+            <tr *ngIf="!(transactions$ | async)?.length">
+              <td colspan="6" style="text-align: center; color: var(--color-text-light);">Nenhuma transação encontrada.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-card">
+        <div class="icon">💡</div>
+        <div>
+          <div style="font-weight:600; margin-bottom:0.5rem;">Dica: Separe suas finanças pessoais das do negócio</div>
+          <p style="font-size:0.9rem;color:var(--color-text-light);">Manter contas separadas facilita o controle, evita confusões e ajuda você a tomar decisões mais conscientes sobre o seu empreendimento. Use a plataforma NextStep para ter uma visão clara do seu fluxo de caixa!</p>
+        </div>
+      </div>
+      <div class="modal-overlay" *ngIf="showModal">
+        <div class="modal">
+          <h3>{{ editing ? 'Editar Transação' : 'Nova Transação' }}</h3>
+          <form (ngSubmit)="saveTransaction()">
+            <div class="form-group">
+              <label>Data</label>
+              <input type="date" [(ngModel)]="form.date" name="date" required />
+            </div>
+            <div class="form-group">
+              <label>Tipo</label>
+              <select [(ngModel)]="form.type" name="type" required>
+                <option value="Receita">Receita</option>
+                <option value="Despesa">Despesa</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Categoria</label>
+              <ng-container *ngIf="(categories$ | async) as cats">
+                <select [(ngModel)]="form.category" name="category" required>
+                  <option [ngValue]="''" disabled>Selecione</option>
+                  <ng-container *ngFor="let cat of cats">
+                    <option *ngIf="cat.type === form.type" [value]="cat.name">{{ cat.name }}</option>
+                  </ng-container>
+                </select>
+              </ng-container>
+            </div>
+            <div class="form-group">
+              <label>Valor (R$)</label>
+              <input type="number" [(ngModel)]="form.amount" name="amount" step="0.01" min="0" required />
+            </div>
+            <div class="form-group">
+              <label>Descrição</label>
+              <input type="text" [(ngModel)]="form.description" name="description" required />
+            </div>
+            <div class="modal-actions">
+	              <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+	                <span *ngIf="!isSaving">{{ editing ? 'Atualizar' : 'Salvar' }}</span>
+	                <span *ngIf="isSaving">Salvando...</span>
+	              </button>
+              <button type="button" class="btn btn-outline" (click)="closeModal()">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>

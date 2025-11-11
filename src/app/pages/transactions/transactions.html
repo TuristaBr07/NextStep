@@ -1,0 +1,125 @@
+<div class="dashboard-page">
+  <aside class="sidebar">
+    <a routerLink="/" class="logo">
+      <img src="assets/figma-assets/logo.webp" alt="logo" style="width:32px;height:32px;" />
+      NextStep
+    </a>
+    <nav class="menu">
+      <a routerLink="/dashboard">Dashboard</a>
+      <a routerLink="/reports">Relatórios</a>
+      <a routerLink="/transactions" class="active">Transações</a> 
+      <a routerLink="/settings">Configurações</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a routerLink="/">&larr; Voltar</a>
+      <a style="color: var(--color-danger); cursor: pointer;" (click)="fazerLogout()">&#x2716; Sair</a>
+    </div>
+  </aside>
+
+  <main class="dashboard-main">
+    <h1>Gerenciar Transações</h1>
+    <p class="sub">Filtre, edite e exclua todas as suas movimentações.</p>
+
+    <div class="filter-bar">
+      <div class="form-group">
+        <label>Buscar na descrição</label>
+        <input type="text" [(ngModel)]="filterText" (ngModelChange)="filtrar()" placeholder="Ex: Pagamento..." />
+      </div>
+      <div class="form-group">
+        <label>Tipo</label>
+        <select [(ngModel)]="filterType" (ngModelChange)="filtrar()">
+          <option value="Todos">Todos</option>
+          <option value="Receita">Receita</option>
+          <option value="Despesa">Despesa</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Categoria</label>
+        <select [(ngModel)]="filterCategory" (ngModelChange)="filtrar()">
+          <option value="Todas">Todas</option>
+          <option *ngFor="let cat of categories$ | async" [value]="cat.name">{{ cat.name }}</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" (click)="openModal()">Nova Transação</button>
+    </div>
+
+    <div class="transactions-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Tipo</th>
+            <th>Categoria</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tx of filteredTransactions">
+            <td>{{ tx.date | date:'dd/MM/yy' }}</td> <td>
+              <span class="tag" [ngClass]="{ 'income': tx.type === 'Receita', 'expense': tx.type === 'Despesa' }">
+                {{ tx.type }}
+              </span>
+            </td>
+            <td>{{ tx.category }}</td>
+            <td>{{ tx.description }}</td>
+            <td style="white-space: nowrap;">{{ tx.amount | currency:'BRL':'symbol':'1.2-2' }}</td>
+            <td style="white-space: nowrap;">
+              <button class="btn btn-sm" (click)="openModal(tx)">Editar</button>
+              <button class="btn btn-sm btn-danger" (click)="deleteTransaction(tx.id)">Excluir</button>
+            </td>
+          </tr>
+          <tr *ngIf="filteredTransactions.length === 0">
+            <td colspan="6" style="text-align: center; color: var(--color-text-light);">Nenhuma transação encontrada.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <div class="modal-overlay" *ngIf="showModal">
+    <div class="modal">
+      <h3>{{ editing ? 'Editar Transação' : 'Nova Transação' }}</h3>
+      <form (ngSubmit)="saveTransaction()">
+        <div class="form-group">
+          <label>Data</label>
+          <input type="date" [(ngModel)]="form.date" name="date" required />
+        </div>
+        <div class="form-group">
+          <label>Tipo</label>
+          <select [(ngModel)]="form.type" name="type" required>
+            <option value="Receita">Receita</option>
+            <option value="Despesa">Despesa</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Categoria</label>
+          <ng-container *ngIf="(categories$ | async) as cats">
+            <select [(ngModel)]="form.category" name="category" required>
+              <option [ngValue]="''" disabled>Selecione</option>
+              <ng-container *ngFor="let cat of cats">
+                <option *ngIf="cat.type === form.type" [value]="cat.name">{{ cat.name }}</option>
+              </ng-container>
+            </select>
+          </ng-container>
+        </div>
+        <div class="form-group">
+          <label>Valor (R$)</label>
+          <input type="number" [(ngModel)]="form.amount" name="amount" step="0.01" min="0" required />
+        </div>
+        <div class="form-group">
+          <label>Descrição</label>
+          <input type="text" [(ngModel)]="form.description" name="description" required />
+        </div>
+        <div class="modal-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+              <span *ngIf="!isSaving">{{ editing ? 'Atualizar' : 'Salvar' }}</span>
+              <span *ngIf="isSaving">Salvando...</span>
+            </button>
+          <button type="button" class="btn btn-outline" (click)="closeModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

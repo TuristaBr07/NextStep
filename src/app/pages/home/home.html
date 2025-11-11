@@ -1,0 +1,187 @@
+<header>
+    <div class="container nav-wrapper">
+      <div class="nav-left">
+        <!-- [routerLink] é o "<a>" do Angular -->
+        <a routerLink="/" class="logo">
+          <!-- Caminho da imagem corrigido -->
+          <img src="assets/figma-assets/logo.webp" alt="NextStep logo">
+          NextStep
+        </a>
+        <nav class="nav-links">
+          <a href="#services">Serviços</a>
+          <a href="#agency">Agência</a>
+          <a href="#learn">Saiba mais</a>
+          <a href="#resources">Recursos</a>
+          <a href="#contact">Contato</a>
+        </nav>
+      </div>
+        <div class="nav-actions">
+          @if (authService.isLoggedIn$ | async) {
+            <a routerLink="/dashboard" class="btn btn-outline">Dashboard</a>
+          } @else {
+            <a routerLink="/login" class="btn btn-outline">Login</a>
+            <a routerLink="/register" class="btn btn-primary">Cadastrar</a>
+          }
+      </div>
+    </div>
+  </header>
+  
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container" style="display:flex; align-items:center;">
+      <div class="hero-content">
+        <h1>Controle Financeiro para MEIs</h1>
+        <p>O NextStep ajuda microempreendedores individuais a gerenciarem suas
+          receitas e despesas de forma simples e inteligente. Tenha seus
+          impostos em dia e foque no crescimento do seu negócio.</p>
+        <a routerLink="/login" class="btn btn-primary">Começar</a>
+      </div>
+      <div class="hero-image">
+        <img src="assets/figma-assets/hero.webp" alt="Empreendedor trabalhando">
+      </div>
+    </div>
+  </section>
+  
+  <!-- Testimonial Section -->
+  <section class="testimonial">
+    <div class="container">
+      <p>Esta plataforma revolucionou a forma como nossa equipe colabora.
+        Os ganhos de produtividade foram notáveis, e a interface intuitiva tornou a adoção perfeita.</p>
+      <div class="author">
+        <img src="assets/figma-assets/avatar.webp" alt="Victor Freitas">
+        <div>
+          <div style="font-weight:600; color:var(--color-text);">Victor Freitas</div>
+          <div>Gerente de qualidade do BOS</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- FAQ Section -->
+  <section class="faq" id="faq">
+    <div class="container faq-grid">
+      <div class="faq-left">
+        <h2>Perguntas Frequentes</h2>
+        <p>Encontre respostas para suas dúvidas sobre como gerenciar seu MEI com o NextStep.</p>
+        <div class="faq-actions">
+          <a href="#" class="btn btn-outline">Mais dúvidas</a>
+          <a href="#" class="btn btn-primary">Nos contate</a>
+        </div>
+      </div>
+      <div class="faq-questions">
+        <div class="question">Como cadastrar minhas receitas e despesas?</div>
+        <div class="question">O NextStep calcula meus impostos automaticamente?</div>
+        <div class="question">Posso exportar relatórios mensais?</div>
+        <div class="question">Quais categorias de despesa posso utilizar?</div>
+        <div class="question">Como altero meus dados cadastrais?</div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Features Section -->
+  <section class="features" id="services">
+    <div class="container">
+      <h2>Recursos Criados para MEIs</h2>
+      <p class="sub">Facilite a gestão financeira do seu microempreendimento com ferramentas pensadas especialmente para você.</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="feature-icon" style="background:#3b82f6;"></span>
+          <h3>Gestão Fiscal Simplificada</h3>
+          <p>Emita suas notas fiscais de serviço e gere o DAS em poucos cliques, mantendo todas as obrigações em dia.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" style="background:#ef4444;"></span>
+          <h3>Controle de Receitas e Despesas</h3>
+          <p>Registre cada entrada e saída para visualizar seu lucro real e planejar investimentos de forma segura.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" style="background:#22c55e;"></span>
+          <h3>Relatórios Personalizados</h3>
+          <p>Acompanhe indicadores de desempenho, projeções mensais e analise a saúde financeira do seu negócio.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section class="features" id="benefits">
+    <div class="container">
+      <h2>Benefícios Exclusivos para MEIs</h2>
+      <p class="sub">Tudo o que você precisa em um único lugar para crescer com segurança.</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="feature-icon" style="background:#facc15;"></span>
+          <h3>Facilidade no cumprimento de obrigações</h3>
+          <p>Receba lembretes automáticos de prazos, gere guias de pagamento e mantenha seu CNPJ regularizado.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" style="background:#a855f7;"></span>
+          <h3>Suporte personalizado</h3>
+          <p>Conte com especialistas para tirar dúvidas sobre impostos, declarações e uso da plataforma.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" style="background:#38bdf8;"></span>
+          <h3>Acesso a financiamento</h3>
+          <p>Organize suas finanças para ter crédito facilitado e expandir seus negócios quando precisar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>NÃO SABE COMO COMEÇAR?</h2>
+      <a routerLink="/login" class="btn btn-primary">Iniciar</a>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <img src="assets/figma-assets/logo.webp" alt="NextStep logo" style="width:32px;height:32px;">
+          Next Step
+        </div>
+        <p>Capacitando equipes a alcançar mais com soluções inovadoras para empresas modernas.</p>
+        <div class="social-links">
+          <span class="social-circle">F</span>
+          <span class="social-circle">T</span>
+          <span class="social-circle">L</span>
+          <span class="social-circle">I</span>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h4>Recursos</h4>
+        <ul>
+          <li>Documentação</li>
+          <li>Suporte</li>
+          <li>Tutorial</li>
+          <li>Blog</li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Produto</h4>
+        <ul>
+          <li>Dashboard</li>
+          <li>Relatórios</li>
+          <li>Transações</li>
+          <li>Planos</li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Contato</h4>
+        <ul>
+          <li>telefone</li>
+          <li>email@example.com</li>
+          <li>Rua do exemplo, 123</li>
+          <li>São Paulo - SP</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2025 Next Step. Todos os direitos reservados.
+    </div>
+  </footer>
+  

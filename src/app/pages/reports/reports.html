@@ -1,0 +1,122 @@
+<div class="dashboard-page">
+  <aside class="sidebar">
+    <a routerLink="/" class="logo">
+      <img src="assets/figma-assets/logo.webp" alt="logo" style="width:32px;height:32px;" />
+      NextStep
+    </a>
+    <nav class="menu">
+      <a routerLink="/dashboard">Dashboard</a>
+      <a routerLink="/reports" class="active">Relatórios</a>
+      <a routerLink="/transactions">Transações</a>
+      <a routerLink="/settings">Configurações</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a routerLink="/">&larr; Voltar</a>
+      <a style="color: var(--color-danger); cursor: pointer;" (click)="fazerLogout()">&#x2716; Sair</a>
+    </div>
+  </aside>
+  <main class="dashboard-main">
+    <h1>Relatórios</h1>
+    <p class="sub">Filtre por data e visualize o desempenho por categoria.</p>
+    
+    <form (ngSubmit)="filtrar()" class="reports-form">
+      <div class="form-group">
+        <label>Data Início</label>
+        <input type="date" [(ngModel)]="dateStart" name="dateStart" />
+      </div>
+      <div class="form-group">
+        <label>Data Fim</label>
+        <input type="date" [(ngModel)]="dateEnd" name="dateEnd" />
+      </div>
+      <div class="form-group">
+        <label>Tipo</label>
+        <select [(ngModel)]="typeFilter" name="typeFilter">
+          <option value="Todos">Todos</option>
+          <option value="Receita">Receita</option>
+          <option value="Despesa">Despesa</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Filtrar</button>
+    </form>
+
+    <div class="reports-grid">
+      
+      <div class="reports-summary">
+        
+        <div class="transactions-table" *ngIf="groupedByCategory.length > 0">
+          
+          <h3>Resumo por Categoria</h3>
+          <div style="max-width: 400px; margin: 0 auto 2rem auto;">
+            <canvas id="pieChartCanvas"></canvas>
+          </div>
+          
+          <h3 style="margin-bottom: 1rem;">Resumo Agrupado</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Categoria</th>
+                <th>Tipo</th>
+                <th>Total</th>
+                <th>Qtd.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let group of groupedByCategory">
+                <td>{{ group.category }}</td>
+                <td>
+                  <span class="tag" [ngClass]="{ 'income': group.type === 'Receita', 'expense': group.type === 'Despesa' }">
+                    {{ group.type }}
+                  </span>
+                </td>
+                <td>{{ group.total | currency:'BRL':'symbol':'1.2-2' }}</td>
+                <td>{{ group.count }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="transactions-table" *ngIf="groupedByCategory.length === 0 && filtered.length > 0" style="text-align: center; padding: 3rem; color: var(--color-text-light);">
+          Nenhum dado para agrupar.
+        </div>
+
+      </div>
+
+      <div class="reports-details">
+        
+        <div class="transactions-table" *ngIf="filtered.length > 0; else emptyState">
+          <h3 style="margin-bottom: 1rem;">Transações Detalhadas</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Tipo</th>
+                <th>Categoria</th>
+                <th>Descrição</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let tx of filtered">
+                <td>{{ tx.date }}</td>
+                <td>
+                  <span class="tag" [ngClass]="{ 'income': tx.type === 'Receita', 'expense': tx.type === 'Despesa' }">
+                    {{ tx.type }}
+                  </span>
+                </td>
+                <td>{{ tx.category }}</td>
+                <td>{{ tx.description }}</td>
+                <td style="white-space: nowrap;">{{ tx.amount | currency:'BRL':'symbol':'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ng-template #emptyState>
+          <div class="transactions-table" style="text-align: center; padding: 3rem; color: var(--color-text-light);">
+            Nenhuma transação encontrada para o período selecionado.
+          </div>
+        </ng-template>
+      </div>
+      
+    </div> </main>
+</div>

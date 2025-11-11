@@ -1,0 +1,11 @@
+<!--
+  Este é o arquivo HTML mais importante.
+  Ele é a "casca" da aplicação.
+  O <router-outlet> é o "portal" onde o Angular
+  vai desenhar as páginas (Home, Login ou Dashboard)
+  com base na URL.
+-->
+<router-outlet></router-outlet>
+
+<!-- Componente de Notificação Global -->
+<app-notification [notification]="notification$ | async"></app-notification>

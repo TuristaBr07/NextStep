@@ -1,0 +1,55 @@
+<div class="auth-page">
+    <div class="auth-form">
+      <a routerLink="/" class="back">&larr; Voltar</a>
+      <h2>BEM-VINDO DE VOLTA</h2>
+      <p class="sub">Não tem uma conta? <a routerLink="/register" style="color: var(--color-primary); text-decoration: underline;">Cadastre-se grátis</a></p>
+      
+      <!--
+        (ngSubmit) chama nosso método 'fazerLogin()'.
+        Substitui o <form onsubmit="...">
+      -->
+      <form (ngSubmit)="fazerLogin()">
+        <div class="form-group">
+          <span class="icon">&#9993;</span>
+          <!--
+            [(ngModel)] (two-way binding) conecta este input
+            à propriedade 'email' do nosso arquivo .ts
+          -->
+          <input type="email" placeholder="Seu e-mail" required [(ngModel)]="email" name="email">
+        </div>
+        <div class="form-group">
+          <span class="icon">&#128274;</span>
+          <!--
+            [(ngModel)] conecta este input
+            à propriedade 'password' do nosso arquivo .ts
+          -->
+          <input type="password" placeholder="Senha" required [(ngModel)]="password" name="password">
+        </div>
+        <div class="remember-forgot">
+          <label><input type="checkbox"> Lembrar de mim</label>
+          <a routerLink="/forgot-password" style="color: var(--color-primary); text-decoration: underline;">Esqueceu a senha?</a>
+        </div>
+	        <button type="submit" class="btn btn-primary" style="width:100%;" [disabled]="isLoading">
+	          <span *ngIf="!isLoading">Entrar</span>
+	          <span *ngIf="isLoading">Carregando...</span>
+	        </button>
+      </form>
+      
+      <div style="margin:1.5rem 0; display:flex; align-items:center; gap:0.5rem; color:var(--color-text-light);">
+        <hr style="flex:1; border:none; border-top:1px solid var(--color-border);">
+        Ou continue com
+        <hr style="flex:1; border:none; border-top:1px solid var(--color-border);">
+      </div>
+      <div class="social-login">
+        <button title="Login com Google">G</button>
+        <button title="Login com Facebook">f</button>
+        <button title="Login com Apple"></button>
+      </div>
+    </div>
+    <div class="auth-image">
+      <!-- Caminho da imagem corrigido -->
+      <img src="assets/figma-assets/hero.webp" alt="Ilustração de login">
+    </div>
+  </div>
+  <!-- A tag <script> foi removida. A lógica agora está no .ts -->
+  
